@@ -5,16 +5,17 @@
     :copyright: © 2018 Grey Li
     :license: MIT, see LICENSE for more details.
 """
+
 import click
 from flask import Flask
 
-app = Flask(__name__)
+app = Flask(__name__)   # Web app 启动项
 
 
 # the minimal Flask application
 @app.route('/')
 def index():
-    return '<h1>Hello, World!</h1>'
+    return '<h1>Hello, Mad World!</h1>'
 
 
 # bind multiple URL for one view function
