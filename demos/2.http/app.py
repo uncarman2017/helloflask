@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-    :author: Grey Li (李辉)
-    :url: http://greyli.com
-    :copyright: © 2018 Grey Li
-    :license: MIT, see LICENSE for more details.
+   第二章的例子：flask和http访问
 """
 import os
+
 try:
     from urlparse import urlparse, urljoin
 except ImportError:
@@ -14,6 +12,7 @@ except ImportError:
 from jinja2 import escape
 from jinja2.utils import generate_lorem_ipsum
 from flask import Flask, make_response, request, redirect, url_for, abort, session, jsonify
+
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY', 'secret string')
@@ -29,9 +28,9 @@ def hello():
     response = '<h1>Hello, %s!</h1>' % escape(name)  # escape name to avoid XSS
     # return different response according to the user's authentication status
     if 'logged_in' in session:
-        response += '[Authenticated]'
+        response += '[User Is Authenticated]'
     else:
-        response += '[Not Authenticated]'
+        response += '[User Is Not Authenticated]'
     return response
 
 
@@ -42,15 +41,17 @@ def hi():
 
 
 # use int URL converter
+# :前为URL参数类型，后为URL参数值
 @app.route('/goback/<int:year>')
 def go_back(year):
     return 'Welcome to %d!' % (2018 - year)
 
 
 # use any URL converter
-@app.route('/colors/<any(blue, white, red):color>')
+# any方法是一个转换器,表示一个元组中的任意值
+@app.route('/colors/<any(blue, white, red):color>', methods=['GET', 'POST'])
 def three_colors(color):
-    return '<p>Love is patient and kind. Love is not jealous or boastful or proud or rude.</p>'
+    return '<p>Love is patient and kind. Love is not jealous or boastful or proud or rude.</p>Color is %s' % color
 
 
 # return error response
@@ -68,44 +69,44 @@ def not_found():
     abort(404)
 
 
-# return response with different formats
+# return response with different formats(html,xml,json)
 @app.route('/note', defaults={'content_type': 'text'})
 @app.route('/note/<content_type>')
 def note(content_type):
     content_type = content_type.lower()
     if content_type == 'text':
         body = '''Note
-to: Peter
-from: Jane
-heading: Reminder
-body: Don't forget the party!
-'''
+                to: Peter
+                from: Jane
+                heading: Reminder
+                body: Don't forget the party!
+                '''
         response = make_response(body)
         response.mimetype = 'text/plain'
     elif content_type == 'html':
         body = '''<!DOCTYPE html>
-<html>
-<head></head>
-<body>
-  <h1>Note</h1>
-  <p>to: Peter</p>
-  <p>from: Jane</p>
-  <p>heading: Reminder</p>
-  <p>body: <strong>Don't forget the party!</strong></p>
-</body>
-</html>
-'''
+                <html>
+                <head></head>
+                <body>
+                  <h1>Note</h1>
+                  <p>to: Peter</p>
+                  <p>from: Jane</p>
+                  <p>heading: Reminder</p>
+                  <p>body: <strong>Don't forget the party!</strong></p>
+                </body>
+                </html>
+                '''
         response = make_response(body)
         response.mimetype = 'text/html'
     elif content_type == 'xml':
         body = '''<?xml version="1.0" encoding="UTF-8"?>
-<note>
-  <to>Peter</to>
-  <from>Jane</from>
-  <heading>Reminder</heading>
-  <body>Don't forget the party!</body>
-</note>
-'''
+                <note>
+                  <to>Peter</to>
+                  <from>Jane</from>
+                  <heading>Reminder</heading>
+                  <body>Don't forget the party!</body>
+                </note>
+                '''
         response = make_response(body)
         response.mimetype = 'application/xml'
     elif content_type == 'json':
@@ -114,7 +115,7 @@ body: Don't forget the party!
             "from": "Jane",
             "heading": "Remider",
             "body": "Don't forget the party!"
-        }
+            }
         }
         response = jsonify(body)
         # equal to:
@@ -161,23 +162,23 @@ def logout():
 def show_post():
     post_body = generate_lorem_ipsum(n=2)
     return '''
-<h1>A very long post</h1>
-<div class="body">%s</div>
-<button id="load">Load More</button>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script type="text/javascript">
-$(function() {
-    $('#load').click(function() {
-        $.ajax({
-            url: '/more',
-            type: 'get',
-            success: function(data){
-                $('.body').append(data);
-            }
-        })
-    })
-})
-</script>''' % post_body
+            <h1>A very long post</h1>
+            <div class="body">%s</div>
+            <button id="load">Load More</button>
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+            <script type="text/javascript">
+            $(function() {
+                $('#load').click(function() {
+                    $.ajax({
+                        url: '/more',
+                        type: 'get',
+                        success: function(data){
+                            $('.body').append(data);
+                        }
+                    })
+                })
+            })
+            </script>''' % post_body
 
 
 @app.route('/more')
@@ -218,3 +219,30 @@ def redirect_back(default='hello', **kwargs):
         if is_safe_url(target):
             return redirect(target)
     return redirect(url_for(default, **kwargs))
+
+
+# 请求钩子
+@app.before_request
+def before_request():
+    print("before request")
+
+
+# @app.after_request
+# def after_request(response):
+#     print("after request")
+#     body = '''<?xml version="1.0" encoding="UTF-8"?>
+#                 <response>
+#                   <body>after request is invoked!</body>
+#                 </response>
+#                 '''
+#     response = make_response(body)
+#     return response
+
+
+@app.before_first_request
+def before_first_request():
+    print("before first request")
+
+
+# request对象api参考 https://dormousehole.readthedocs.io/en/latest/api.html#incoming-request-data
+# response对象api参考 https://dormousehole.readthedocs.io/en/latest/api.html#response-objects

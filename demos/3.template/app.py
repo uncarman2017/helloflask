@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    :author: Grey Li (李辉)
-    :url: http://greyli.com
-    :copyright: © 2018 Grey Li
-    :license: MIT, see LICENSE for more details.
+   第三章的例子：html模板的示例
 """
 import os
 from flask import Flask, render_template, flash, redirect, url_for, Markup
@@ -32,6 +29,7 @@ movies = [
 ]
 
 
+# html模板默认放在templates下
 @app.route('/watchlist')
 def watchlist():
     return render_template('watchlist.html', user=user, movies=movies)

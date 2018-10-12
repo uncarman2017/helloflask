@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!--Jinja模板语法 -->
+<!--http://jinja.pocoo.org/docs/2.10/-->
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -16,7 +18,7 @@
 <h5>{{ user.username }}'s Watchlist ({{ movies|length }}):</h5>
 <ul>
     {% for movie in movies %}
-    <li>{{ movie.name }} - {{ movie.year }}</li>
+        <li>{{ movie.name }} - {{ movie.year }}</li>
     {% endfor %}
 </ul>
 </body>
