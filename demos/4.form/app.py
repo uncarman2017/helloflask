@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    :author: Grey Li (李辉)
-    :url: http://greyli.com
-    :copyright: © 2018 Grey Li
-    :license: MIT, see LICENSE for more details.
+    第四章: 表单实例
 """
 import os
 import uuid
@@ -48,9 +45,10 @@ def index():
     return render_template('index.html')
 
 
+# 登录页载入和提交
 @app.route('/html', methods=['GET', 'POST'])
 def html():
-    form = LoginForm()
+    # form = LoginForm()
     if request.method == 'POST':
         username = request.form.get('username')
         flash('Welcome home, %s!' % username)
@@ -58,6 +56,7 @@ def html():
     return render_template('pure_html.html')
 
 
+# 登录页载入和提交
 @app.route('/basic', methods=['GET', 'POST'])
 def basic():
     form = LoginForm()
@@ -68,6 +67,7 @@ def basic():
     return render_template('basic.html', form=form)
 
 
+# bootstrap form载入和提交
 @app.route('/bootstrap', methods=['GET', 'POST'])
 def bootstrap():
     form = LoginForm()
@@ -78,6 +78,7 @@ def bootstrap():
     return render_template('bootstrap.html', form=form)
 
 
+# 自定义验证器
 @app.route('/custom-validator', methods=['GET', 'POST'])
 def custom_validator():
     form = FortyTwoForm()
@@ -87,16 +88,19 @@ def custom_validator():
     return render_template('custom_validator.html', form=form)
 
 
+# 上传文件
 @app.route('/uploads/<path:filename>')
 def get_file(filename):
     return send_from_directory(app.config['UPLOAD_PATH'], filename)
 
 
+# 上传单个图片
 @app.route('/uploaded-images')
 def show_images():
     return render_template('uploaded.html')
 
 
+# 允许文件扩展名示例
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
@@ -108,6 +112,7 @@ def random_filename(filename):
     return new_filename
 
 
+# 上传单个文件示例
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     form = UploadForm()
@@ -121,6 +126,7 @@ def upload():
     return render_template('upload.html', form=form)
 
 
+# 上传多个文件示例
 @app.route('/multi-upload', methods=['GET', 'POST'])
 def multi_upload():
     form = MultiUploadForm()
@@ -162,6 +168,7 @@ def multi_upload():
     return render_template('upload.html', form=form)
 
 
+# 拖拉上传文件示例
 @app.route('/dropzone-upload', methods=['GET', 'POST'])
 def dropzone_upload():
     if request.method == 'POST':
@@ -180,6 +187,7 @@ def dropzone_upload():
     return render_template('dropzone.html')
 
 
+#
 @app.route('/two-submits', methods=['GET', 'POST'])
 def two_submits():
     form = NewPostForm()
@@ -193,7 +201,7 @@ def two_submits():
         return redirect(url_for('index'))
     return render_template('2submit.html', form=form)
 
-
+# 单视图页多窗体
 @app.route('/multi-form', methods=['GET', 'POST'])
 def multi_form():
     signin_form = SigninForm()
@@ -212,6 +220,7 @@ def multi_form():
     return render_template('2form.html', signin_form=signin_form, register_form=register_form)
 
 
+# 多窗体多视图
 @app.route('/multi-form-multi-view')
 def multi_form_multi_view():
     signin_form = SigninForm2()
@@ -219,6 +228,7 @@ def multi_form_multi_view():
     return render_template('2form2view.html', signin_form=signin_form, register_form=register_form)
 
 
+#
 @app.route('/handle-signin', methods=['POST'])
 def handle_signin():
     signin_form = SigninForm2()

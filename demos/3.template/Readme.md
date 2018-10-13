@@ -25,9 +25,9 @@ dict(**items)
 
 
 ## Flask全局函数
-1.render_template       渲染模板
-2.url_for               用于生成URL
-3.get_flashed_messages  获取flash消息
+1.render_template       渲染模板 <br/>
+2.url_for               用于生成URL <br/>
+3.get_flashed_messages  获取flash消息 <br/>
 
 
 ## 自定义全局函数
