@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    :author: Grey Li (李辉)
-    :url: http://greyli.com
-    :copyright: © 2018 Grey Li
-    :license: MIT, see LICENSE for more details.
+   邮件收发示例
 """
 import os
 from threading import Thread
@@ -30,7 +27,7 @@ app.config.update(
     MAIL_DEFAULT_SENDER=('Grey Li', os.getenv('MAIL_USERNAME'))
 )
 
-mail = Mail(app)
+mail = Mail(app)  # SMTP邮件对象
 
 
 # send over SMTP

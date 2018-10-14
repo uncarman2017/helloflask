@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    :author: Grey Li (李辉)
-    :url: http://greyli.com
-    :copyright: © 2018 Grey Li
-    :license: MIT, see LICENSE for more details.
+    SQLAlchemy示例
 """
 import os
 import sys
@@ -20,6 +17,7 @@ from wtforms.validators import DataRequired
 WIN = sys.platform.startswith('win')
 if WIN:
     prefix = 'sqlite:///'
+    # prefix = "mysql://root:redmaple@localhost:3306/test"
 else:
     prefix = 'sqlite:////'
 
@@ -32,7 +30,7 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'secret string')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', prefix + os.path.join(app.root_path, 'data.db'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(app)  # 创建DB对象
 
 
 # handlers
