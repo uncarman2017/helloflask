@@ -80,7 +80,7 @@ celerybeat-schedule
 *.sage.py
 
 # dotenv
-.env
+#.env
 
 # virtualenv
 .venv
@@ -107,9 +107,9 @@ ENV/
 docs/_build/
 
 # SQLite
-*.db
-*.sqlite
-*.sqlite3
+# *.db
+# *.sqlite
+# *.sqlite3
 
 # Upload file
 demos/form/uploads/*
